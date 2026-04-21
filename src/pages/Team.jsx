@@ -1,14 +1,62 @@
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 
+const localTeamImages = import.meta.glob('../assets/team/*.{png,jpg,jpeg,webp,avif}', {
+  eager: true,
+  import: 'default',
+});
+
+const getLocalImage = (fileName) => localTeamImages[`../assets/team/${fileName}`];
+
 const team = [
-  { name: 'Mohamed Khaled', ID: '192300448', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80', bio: 'Mohamed specializes in creating beautiful and responsive user interfaces, combining artistic vision with technical precision. Mohamed is passionate about modern web technologies, including HTML5, CSS3, JavaScript, and frameworks like React and Laravel.' },
-  { name: 'Sara Kim', role: 'CTO', img: 'https://images.unsplash.com/photo-1494790108755-2616b612a4ba?w=300&q=80', bio: 'Ex-Google engineer who built the platform from the ground up. Loves elegant architecture and fast code.' },
-  { name: 'Marcus Chen', role: 'Head of Design', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80', bio: 'Award-winning designer previously at Apple. Believes great design should be invisible.' },
-  { name: 'Priya Patel', role: 'VP of Operations', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&q=80', bio: 'Supply chain expert who ensures every package arrives on time and in perfect condition.' },
-  { name: 'Jordan Lee', role: 'Head of Marketing', img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80', bio: 'Growth hacker who scaled Veritex from 0 to 2 million customers in under 3 years.' },
-  { name: 'Nina Torres', role: 'Customer Success Lead', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80', bio: 'Obsessed with customer happiness. Has personally responded to over 10,000 support tickets.' },
+  {
+    name: 'Mohamed Khaled',
+    role: '192300448',
+    imageFile: 'Mohamed.jpg',
+    fallback: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80',
+  },
+  {
+    name: 'Mohamed alaa Eldin',
+    role: '192300519',
+    imageFile: 'sara-kim.jpg',
+    fallback: 'https://images.unsplash.com/photo-1494790108755-2616b612a4ba?w=300&q=80',
+  },
+  {
+    name: 'Abdelaziz Amir Abdelaziz',
+    role: '192300477',
+    imageFile: 'marcus-chen.jpg',
+    fallback: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80',
+  },
+  {
+    name: 'Mohamed Amr',
+    role: '192300311',
+    imageFile: 'priya-patel.jpg',
+    fallback: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&q=80',
+  },
+  {
+    name: 'Mohamed Hatem Mohamed',
+    role: '192300191',
+    imageFile: 'jordan-lee.jpg',
+    fallback: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80',
+  },
+  {
+    name: 'Waleed Khalaf',
+    role: '192200272',
+    imageFile: 'nina-torres.jpg',
+    fallback: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
+  },
+   {
+    name: 'Abdallah Mousa',
+    role: '192300370',
+    imageFile: 'nina-torres.jpg',
+    fallback: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
+  },
 ];
+
+const teamWithImage = team.map((member) => ({
+  ...member,
+  img: getLocalImage(member.imageFile) || member.fallback,
+}));
 
 export default function Team() {
   return (
@@ -25,7 +73,7 @@ export default function Team() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {team.map((member, i) => (
+          {teamWithImage.map((member, i) => (
             <motion.div
               key={member.name}
               initial={{ opacity: 0, y: 20 }}
