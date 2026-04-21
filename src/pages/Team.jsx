@@ -24,7 +24,7 @@ const team = [
   {
     name: 'Abdelaziz Amir Abdelaziz',
     role: '192300477',
-    imageFile: 'marcus-chen.jpg',
+    imageFile: 'zizo.jpeg',
     fallback: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80',
   },
   {
