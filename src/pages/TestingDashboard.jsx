@@ -204,7 +204,7 @@ function DashboardContent() {
           <section className="card p-5 md:p-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">CI Results Integration</h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Paste CI JSON payload with tests array. Example: {"tests":[{"id":"TC-001","status":"passed"}],"source":"GitHub Actions"}
+              Paste CI JSON payload with tests array. Example: <span className="font-mono">{`{"tests":[{"id":"TC-001","status":"passed"}],"source":"GitHub Actions"}`}</span>
             </p>
             <textarea
               value={ciPayload}

@@ -26,13 +26,14 @@ import NotFound from './pages/NotFound';
 
 function ProtectedRoute({ children, adminOnly = false }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return null;
   }
 
   if (!user) {
-    return <Navigate to="/login" replace state={{ from: '/testing-dashboard' }} />;
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
   if (adminOnly && user.role !== 'admin') {

@@ -26,10 +26,7 @@ export default function Shop() {
   const [visibleCount, setVisibleCount] = useState(8);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(true);
-  const debouncedSearch = useDebounce(search, 300);
-  const searchBoxRef = useRef(null);
-
-  const managedProducts = useMemo(() => {
+  const [managedProducts, setManagedProducts] = useState(() => {
     const saved = localStorage.getItem('veritex_admin_products');
     if (!saved) {
       return products.map(product => ({ ...product, stock: product.stock ?? (product.id % 5 === 0 ? 0 : 12 + (product.id % 9)) }));
@@ -40,6 +37,29 @@ export default function Shop() {
     } catch {
       return products;
     }
+  });
+  const debouncedSearch = useDebounce(search, 300);
+  const searchBoxRef = useRef(null);
+
+  useEffect(() => {
+    const syncProducts = () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem('veritex_admin_products') || 'null');
+        if (saved && Array.isArray(saved)) {
+          setManagedProducts(saved.map(product => ({ ...product, stock: product.stock ?? 0 })));
+        }
+      } catch {
+        setManagedProducts(products);
+      }
+    };
+
+    syncProducts();
+    window.addEventListener('storage', syncProducts);
+    window.addEventListener('focus', syncProducts);
+    return () => {
+      window.removeEventListener('storage', syncProducts);
+      window.removeEventListener('focus', syncProducts);
+    };
   }, []);
 
   useEffect(() => {
