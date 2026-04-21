@@ -18,7 +18,7 @@ const team = [
   {
     name: 'Mohamed alaa Eldin',
     role: '192300519',
-    imageFile: 'sara-kim.jpg',
+    imageFile: 'mohamed alla.jpeg',
     fallback: 'https://images.unsplash.com/photo-1494790108755-2616b612a4ba?w=300&q=80',
   },
   {
