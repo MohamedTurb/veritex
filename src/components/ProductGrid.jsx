@@ -3,7 +3,9 @@ import ProductCard from './ProductCard';
 export function SkeletonCard() {
   return (
     <div className="card overflow-hidden animate-pulse">
-      <div className="aspect-square skeleton" />
+      <div className="aspect-square skeleton relative overflow-hidden">
+        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent animate-[shimmer_1.8s_infinite]" />
+      </div>
       <div className="p-4 space-y-3">
         <div className="h-3 skeleton rounded w-1/3" />
         <div className="h-4 skeleton rounded w-3/4" />
@@ -37,7 +39,7 @@ export function ProductGrid({ products, loading = false }) {
           </svg>
         </div>
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">No products found</h3>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Try adjusting your filters or search terms.</p>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">Try adjusting filters, search terms, or availability criteria.</p>
       </div>
     );
   }

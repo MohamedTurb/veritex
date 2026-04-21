@@ -13,26 +13,40 @@ export function AuthProvider({ children }) {
       name: 'Testing Admin',
       email: 'testing@veritex.com',
       password: 'Testing123',
+      role: 'admin',
       joined: new Date().toISOString(),
     };
 
-    if (!users.some(u => u.email === demoUser.email)) {
+    const existingDemoIndex = users.findIndex(u => u.email?.toLowerCase() === demoUser.email);
+
+    if (existingDemoIndex === -1) {
       users.push(demoUser);
-      localStorage.setItem('veritex_users', JSON.stringify(users));
+    } else {
+      users[existingDemoIndex] = {
+        ...users[existingDemoIndex],
+        role: 'admin',
+      };
     }
 
+    localStorage.setItem('veritex_users', JSON.stringify(users));
+
     const saved = localStorage.getItem('veritex_user');
-    if (saved) setUser(JSON.parse(saved));
+    if (saved) {
+      const safeUser = JSON.parse(saved);
+      setUser({ ...safeUser, role: safeUser.role || 'user' });
+    }
     setLoading(false);
   }, []);
 
   const login = (email, password) => {
     const users = JSON.parse(localStorage.getItem('veritex_users') || '[]');
-    const found = users.find(u => u.email === email && u.password === password);
+    const normalizedEmail = email.trim().toLowerCase();
+    const found = users.find(u => u.email?.toLowerCase() === normalizedEmail && u.password === password);
     if (found) {
       const { password: _, ...safeUser } = found;
-      setUser(safeUser);
-      localStorage.setItem('veritex_user', JSON.stringify(safeUser));
+      const withRole = { ...safeUser, role: safeUser.role || 'user' };
+      setUser(withRole);
+      localStorage.setItem('veritex_user', JSON.stringify(withRole));
       return { success: true };
     }
     return { success: false, error: 'Invalid email or password' };
@@ -40,10 +54,18 @@ export function AuthProvider({ children }) {
 
   const signup = (name, email, password) => {
     const users = JSON.parse(localStorage.getItem('veritex_users') || '[]');
-    if (users.find(u => u.email === email)) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (users.find(u => u.email?.toLowerCase() === normalizedEmail)) {
       return { success: false, error: 'Email already registered' };
     }
-    const newUser = { id: Date.now(), name, email, password, joined: new Date().toISOString() };
+    const newUser = {
+      id: Date.now(),
+      name,
+      email: normalizedEmail,
+      password,
+      role: 'user',
+      joined: new Date().toISOString(),
+    };
     users.push(newUser);
     localStorage.setItem('veritex_users', JSON.stringify(users));
     const { password: _, ...safeUser } = newUser;

@@ -16,9 +16,26 @@ const themeIcon = {
 
 function DashboardContent() {
   const { dark, toggle } = useTheme();
-  const { tests, bugs, logs, running, summary, coverage, charts, runTests } = useTesting();
+  const {
+    tests,
+    bugs,
+    logs,
+    running,
+    summary,
+    coverage,
+    charts,
+    runHistory,
+    runTests,
+    compareRuns,
+    exportRunsCsv,
+    exportRunsPdf,
+    importCiResults,
+  } = useTesting();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
+  const [baseRunId, setBaseRunId] = useState('');
+  const [targetRunId, setTargetRunId] = useState('');
+  const [ciPayload, setCiPayload] = useState('');
 
   const filteredTests = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -37,10 +54,39 @@ function DashboardContent() {
     const passed = nextTests.filter(test => test.status === 'passed').length;
     const failed = nextTests.length - passed;
 
-    toast.success(`Tests completed: ${passed} passed, ${failed} failed`, {
+    toast.success(`Manual test run completed: ${passed} passed, ${failed} failed.`, {
       duration: 3500,
     });
   };
+
+  const handleExportCsv = () => {
+    if (exportRunsCsv(targetRunId || baseRunId)) {
+      toast.success('CSV report exported successfully.');
+    } else {
+      toast.error('No run data found for CSV export.');
+    }
+  };
+
+  const handleExportPdf = () => {
+    if (exportRunsPdf(targetRunId || baseRunId)) {
+      toast.success('PDF report exported successfully.');
+    } else {
+      toast.error('No run data found for PDF export.');
+    }
+  };
+
+  const handleImportCiResults = () => {
+    const result = importCiResults(ciPayload);
+    if (result.success) {
+      toast.success(`Imported ${result.imported} test results from CI.`);
+      setCiPayload('');
+      return;
+    }
+
+    toast.error(result.error || 'Failed to import CI results.');
+  };
+
+  const comparison = compareRuns(baseRunId, targetRunId);
 
   return (
     <div className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(249,115,22,0.16),_transparent_34%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.12),_transparent_32%),linear-gradient(180deg,_rgba(15,23,42,0.02),_transparent_20%)] dark:bg-[radial-gradient(circle_at_top_left,_rgba(249,115,22,0.18),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.12),_transparent_24%),linear-gradient(180deg,_rgba(255,255,255,0.02),_transparent_18%)]">
@@ -86,6 +132,89 @@ function DashboardContent() {
 
         <div className="space-y-8">
           <SummaryCards summary={summary} />
+
+          <section className="grid gap-6 xl:grid-cols-2">
+            <div className="card p-5 md:p-6">
+              <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Run History</h2>
+                <div className="flex gap-2">
+                  <button type="button" onClick={handleExportCsv} className="btn-secondary px-4 py-2 text-sm">Export CSV</button>
+                  <button type="button" onClick={handleExportPdf} className="btn-secondary px-4 py-2 text-sm">Export PDF</button>
+                </div>
+              </div>
+
+              {!runHistory.length ? (
+                <div className="rounded-2xl border border-dashed border-gray-300 p-8 text-center text-sm text-gray-500 dark:border-dark-500 dark:text-gray-400">
+                  No test runs recorded yet. Run tests to create the first report snapshot.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {runHistory.slice(0, 6).map(run => (
+                    <div key={run.id} className="rounded-2xl border border-gray-100 p-4 dark:border-dark-700">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">{run.id}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{new Date(run.createdAt).toLocaleString()} · {run.source}</p>
+                        </div>
+                        <span className="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-semibold text-orange-700 dark:text-orange-300">
+                          {run.summary.successRate}% success
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="card p-5 md:p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Compare Runs</h2>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Compare two snapshots to track quality movement.</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <select value={baseRunId} onChange={e => setBaseRunId(e.target.value)} className="input-field">
+                  <option value="">Select base run</option>
+                  {runHistory.map(run => <option key={run.id} value={run.id}>{run.id}</option>)}
+                </select>
+                <select value={targetRunId} onChange={e => setTargetRunId(e.target.value)} className="input-field">
+                  <option value="">Select target run</option>
+                  {runHistory.map(run => <option key={run.id} value={run.id}>{run.id}</option>)}
+                </select>
+              </div>
+
+              {comparison ? (
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-xl border border-gray-100 p-3 dark:border-dark-700">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Passed Delta</p>
+                    <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">{comparison.delta.passed > 0 ? '+' : ''}{comparison.delta.passed}</p>
+                  </div>
+                  <div className="rounded-xl border border-gray-100 p-3 dark:border-dark-700">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Failed Delta</p>
+                    <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">{comparison.delta.failed > 0 ? '+' : ''}{comparison.delta.failed}</p>
+                  </div>
+                  <div className="rounded-xl border border-gray-100 p-3 dark:border-dark-700">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Success Rate Delta</p>
+                    <p className="mt-1 text-lg font-bold text-gray-900 dark:text-white">{comparison.delta.successRate > 0 ? '+' : ''}{comparison.delta.successRate}%</p>
+                  </div>
+                </div>
+              ) : (
+                <p className="mt-5 text-sm text-gray-500 dark:text-gray-400">Select two runs to view comparison metrics.</p>
+              )}
+            </div>
+          </section>
+
+          <section className="card p-5 md:p-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">CI Results Integration</h2>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Paste CI JSON payload with tests array. Example: {"tests":[{"id":"TC-001","status":"passed"}],"source":"GitHub Actions"}
+            </p>
+            <textarea
+              value={ciPayload}
+              onChange={e => setCiPayload(e.target.value)}
+              rows={4}
+              className="input-field mt-4 resize-none"
+              placeholder='{"tests":[{"id":"TC-001","status":"passed"}],"source":"GitHub Actions"}'
+            />
+            <button type="button" onClick={handleImportCiResults} className="btn-primary mt-4 px-5 py-3 text-sm">Import CI Results</button>
+          </section>
 
           <section className="card p-5 md:p-6">
             <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">

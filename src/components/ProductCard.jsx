@@ -21,10 +21,17 @@ const badgeColors = {
 export default function ProductCard({ product, index = 0 }) {
   const { addItem } = useCart();
   const [imgLoaded, setImgLoaded] = useState(false);
+  const isOutOfStock = (product.stock ?? 1) <= 0;
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (isOutOfStock) {
+      toast.error(`${product.title} is out of stock right now.`);
+      return;
+    }
+
     addItem(product);
     toast.success(`${product.title} added to cart!`, {
       duration: 2000,
@@ -60,6 +67,11 @@ export default function ProductCard({ product, index = 0 }) {
                 {product.badge}
               </span>
             )}
+            {isOutOfStock && (
+              <span className="absolute top-3 right-3 badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 text-xs font-semibold">
+                Out of stock
+              </span>
+            )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 dark:group-hover:bg-white/5 transition-colors duration-300" />
           </div>
 
@@ -92,12 +104,17 @@ export default function ProductCard({ product, index = 0 }) {
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={handleAddToCart}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-lg transition-colors duration-200 shadow-md shadow-brand-500/25"
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-semibold rounded-lg transition-colors duration-200 shadow-md ${
+                  isOutOfStock
+                    ? 'bg-gray-400 cursor-not-allowed shadow-none'
+                    : 'bg-brand-500 hover:bg-brand-600 shadow-brand-500/25'
+                }`}
+                disabled={isOutOfStock}
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                 </svg>
-                Add
+                {isOutOfStock ? 'Unavailable' : 'Add'}
               </motion.button>
             </div>
           </div>
