@@ -1,0 +1,115 @@
+{
+  "tests": [
+    {
+      "id": "TC-001",
+      "name": "Login Test",
+      "scenario": "User logs in with valid credentials",
+      "steps": "1. Open login page\n2. Enter email and password\n3. Click Sign In",
+      "expectedResult": "User is redirected to the dashboard and session is created",
+      "status": "passed",
+      "feature": "Authentication"
+    },
+    {
+      "id": "TC-002",
+      "name": "Invalid Login Test",
+      "scenario": "User submits invalid credentials",
+      "steps": "1. Open login page\n2. Enter invalid credentials\n3. Click Sign In",
+      "expectedResult": "Validation message is shown and login is blocked",
+      "status": "failed",
+      "feature": "Authentication"
+    },
+    {
+      "id": "TC-003",
+      "name": "Add to Cart Test",
+      "scenario": "Product is added to cart from product details",
+      "steps": "1. Open product details\n2. Select size if needed\n3. Click Add to Cart",
+      "expectedResult": "Cart counter increments and product appears in cart",
+      "status": "passed",
+      "feature": "Cart"
+    },
+    {
+      "id": "TC-004",
+      "name": "Remove Cart Item Test",
+      "scenario": "User removes an item from cart",
+      "steps": "1. Open cart page\n2. Remove a product\n3. Verify updated totals",
+      "expectedResult": "Item is removed and totals recalculate correctly",
+      "status": "passed",
+      "feature": "Cart"
+    },
+    {
+      "id": "TC-005",
+      "name": "Checkout Form Test",
+      "scenario": "User completes checkout with valid data",
+      "steps": "1. Open checkout page\n2. Enter shipping details\n3. Submit order",
+      "expectedResult": "Order confirmation is shown and payment flow is successful",
+      "status": "failed",
+      "feature": "Checkout"
+    },
+    {
+      "id": "TC-006",
+      "name": "Coupon Validation Test",
+      "scenario": "User applies a valid discount code",
+      "steps": "1. Open checkout page\n2. Enter coupon code\n3. Apply coupon",
+      "expectedResult": "Discount is applied and order total updates",
+      "status": "passed",
+      "feature": "Checkout"
+    },
+    {
+      "id": "TC-007",
+      "name": "Password Reset Test",
+      "scenario": "User requests password reset email",
+      "steps": "1. Open forgot password screen\n2. Enter email\n3. Submit request",
+      "expectedResult": "Reset email is sent to the registered address",
+      "status": "passed",
+      "feature": "Authentication"
+    },
+    {
+      "id": "TC-008",
+      "name": "Cart Badge Sync Test",
+      "scenario": "Cart badge reflects items across tabs",
+      "steps": "1. Add product in one tab\n2. Open cart in another tab\n3. Refresh state",
+      "expectedResult": "Cart count stays in sync across the session",
+      "status": "failed",
+      "feature": "Cart"
+    },
+    {
+      "id": "TC-009",
+      "name": "Address Validation Test",
+      "scenario": "Checkout rejects incomplete address data",
+      "steps": "1. Open checkout page\n2. Leave address fields incomplete\n3. Submit form",
+      "expectedResult": "Inline validation prevents submission",
+      "status": "passed",
+      "feature": "Checkout"
+    }
+  ],
+  "bugs": [
+    {
+      "title": "Cart subtotal lags after rapid updates",
+      "severity": "Medium",
+      "status": "Open"
+    },
+    {
+      "title": "Login error copy is inconsistent with design system",
+      "severity": "Low",
+      "status": "Fixed"
+    },
+    {
+      "title": "Checkout progress indicator overlaps on mobile",
+      "severity": "High",
+      "status": "Open"
+    },
+    {
+      "title": "Coupon toast can stack twice on slow networks",
+      "severity": "Medium",
+      "status": "Fixed"
+    }
+  ],
+  "logs": [
+    "[PASS] Login Test",
+    "[FAIL] Invalid Login Test",
+    "[PASS] Add to Cart Test",
+    "[PASS] Remove Cart Item Test",
+    "[FAIL] Checkout Form Test",
+    "[PASS] Coupon Validation Test"
+  ]
+}
