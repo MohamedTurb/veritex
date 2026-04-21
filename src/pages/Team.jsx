@@ -48,7 +48,7 @@ const team = [
    {
     name: 'Abdallah Mousa',
     role: '192300370',
-    imageFile: 'nina-torres.jpg',
+    imageFile: 'mousa.jpeg',
     fallback: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
   },
 ];
