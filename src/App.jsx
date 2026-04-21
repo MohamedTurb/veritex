@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -21,6 +22,20 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import TestingDashboard from './pages/TestingDashboard';
 import NotFound from './pages/NotFound';
+
+function ProtectedRoute({ children }) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return null;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: '/testing-dashboard' }} />;
+  }
+
+  return children;
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -41,7 +56,14 @@ function AnimatedRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/testing-dashboard" element={<TestingDashboard />} />
+        <Route
+          path="/testing-dashboard"
+          element={(
+            <ProtectedRoute>
+              <TestingDashboard />
+            </ProtectedRoute>
+          )}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

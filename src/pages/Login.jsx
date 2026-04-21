@@ -9,7 +9,7 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from || '/dashboard';
+  const from = location.state?.from || '/testing-dashboard';
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -59,6 +59,10 @@ export default function Login() {
           </div>
 
           <div className="card p-8">
+            <div className="mb-4 rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300">
+              Testing dashboard demo login: testing@veritex.com / Testing123
+            </div>
+
             {errors.general && (
               <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm rounded-xl">
                 {errors.general}

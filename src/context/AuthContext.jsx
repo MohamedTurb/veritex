@@ -7,6 +7,20 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const users = JSON.parse(localStorage.getItem('veritex_users') || '[]');
+    const demoUser = {
+      id: 'demo-testing-user',
+      name: 'Testing Admin',
+      email: 'testing@veritex.com',
+      password: 'Testing123',
+      joined: new Date().toISOString(),
+    };
+
+    if (!users.some(u => u.email === demoUser.email)) {
+      users.push(demoUser);
+      localStorage.setItem('veritex_users', JSON.stringify(users));
+    }
+
     const saved = localStorage.getItem('veritex_user');
     if (saved) setUser(JSON.parse(saved));
     setLoading(false);

@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 
 const contactInfo = [
   { icon: '📧', label: 'Email', value: 'hello@veritex.shop', href: 'mailto:hello@veritex.shop' },
-  { icon: '📞', label: 'Phone', value: '+1 (555) 000-1234', href: 'tel:+15550001234' },
-  { icon: '📍', label: 'Address', value: '123 Commerce St, New York, NY 10001', href: '#' },
+  { icon: '📞', label: 'Phone', value: '+20155537991', href: 'tel:+20155537991' },
+  { icon: '📍', label: 'Address', value: 'Egyptian Chinese Universty', href: '#' },
   { icon: '🕒', label: 'Hours', value: 'Mon–Fri, 9am–6pm EST', href: null },
 ];
 
