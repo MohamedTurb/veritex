@@ -12,7 +12,7 @@ const team = [
   {
     name: 'Mohamed Khaled',
     role: '192300448',
-    imageFile: 'Mohamed.jpg',
+    imageFile: 'Mohamed.jpeg',
     fallback: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80',
   },
   {
@@ -36,13 +36,13 @@ const team = [
   {
     name: 'Mohamed Hatem Mohamed',
     role: '192300191',
-    imageFile: 'jordan-lee.jpg',
+    imageFile: 'hatem.jpeg',
     fallback: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80',
   },
   {
     name: 'Waleed Khalaf',
     role: '192200272',
-    imageFile: 'nina-torres.jpg',
+    imageFile: 'walled.jpeg',
     fallback: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
   },
    {
