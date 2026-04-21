@@ -30,7 +30,7 @@ const team = [
   {
     name: 'Mohamed Amr',
     role: '192300311',
-    imageFile: 'mohamed alla.jpeg',
+    imageFile: 'Amr.jpeg',
     fallback: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&q=80',
   },
   {
