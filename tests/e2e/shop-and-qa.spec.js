@@ -4,8 +4,8 @@ test('shop page loads and can navigate to categories', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByText('Shop by Category')).toBeVisible();
-  await page.getByRole('link', { name: 'Shop' }).click();
-  await expect(page.getByRole('heading', { name: 'Shop' })).toBeVisible();
+  await page.getByRole('link', { name: 'Shop', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Shop', exact: true })).toBeVisible();
 });
 
 test('testing dashboard is protected by login', async ({ page }) => {
