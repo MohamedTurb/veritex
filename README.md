@@ -73,8 +73,45 @@ npm run preview
 - `npm run dev`: Start the app in development mode
 - `npm run build`: Build production assets
 - `npm run preview`: Preview the production build
+- `npm run test`: Run unit/integration tests with Vitest
+- `npm run e2e`: Run Playwright E2E tests
+- `npm run cy:open`: Open Cypress interactive UI
+- `npm run cy:run`: Run Cypress headless
+- `npm run test:cypress`: Start app then run Cypress smoke tests
+- `npm run postman:run`: Run Postman collection through Newman
+- `npm run test:postman`: Start app then run Newman collection
+- `npm run selenium:run`: Run Selenium smoke test directly
+- `npm run test:selenium`: Start app then run Selenium smoke test
 
-## 5) Project Structure
+## CI
+
+A GitHub Actions workflow runs the full test matrix (Vitest, Playwright, Cypress, Newman, Selenium) on push and PR to `main`/`master`: `.github/workflows/tests.yml`.
+
+## 5) Added Testing Tools
+
+### Cypress
+- Config: `cypress.config.js`
+- Specs: `cypress/e2e/*.cy.js`
+- Current smoke scenarios:
+  - Home page loads
+  - Shop navigation works
+  - Testing dashboard redirects to login when unauthenticated
+
+### Postman (Newman CLI)
+- Collection: `tests/postman/veritex-smoke.postman_collection.json`
+- Environment: `tests/postman/local.postman_environment.json`
+- Current smoke scenarios:
+  - `GET /` returns 200
+  - `GET /shop` returns 200
+
+### Selenium
+- Script: `tests/selenium/shop.smoke.test.mjs`
+- Uses headless Chrome through Selenium WebDriver.
+- Current smoke scenarios:
+  - Home page content is visible
+  - Shop route can be opened and verified
+
+## 6) Project Structure
 
 ```text
 src/
@@ -125,7 +162,7 @@ src/
   main.jsx
 ```
 
-## 6) Routes
+## 7) Routes
 
 Main routes:
 - `/` Home page
@@ -147,7 +184,7 @@ Testing dashboard route:
 
 Important: `/testing-dashboard` is protected and requires login.
 
-## 7) Authentication
+## 8) Authentication
 
 This project uses `AuthContext` with LocalStorage:
 - Current user is stored in `veritex_user`
@@ -162,7 +199,7 @@ You can access the testing dashboard using:
 
 If you open `/testing-dashboard` without authentication, you will be redirected to `/login`, then returned after successful login.
 
-## 8) State Management (Context API)
+## 9) State Management (Context API)
 
 ### AuthContext
 - `login(email, password)`
@@ -188,7 +225,7 @@ If you open `/testing-dashboard` without authentication, you will be redirected 
   - Coverage per feature
 - Runs `runTests` simulation to refresh results, logs, and bugs
 
-## 9) Software Testing Dashboard
+## 10) Software Testing Dashboard
 
 Page: `src/pages/TestingDashboard.jsx`
 
@@ -205,7 +242,7 @@ Includes:
 - Dark Mode Toggle
 - Toast Notifications
 
-## 10) Team Images
+## 11) Team Images
 
 The Team page reads images from a local folder:
 - `src/assets/team`
@@ -216,7 +253,7 @@ The Team page reads images from a local folder:
 
 You can replace team photos by adding files there and updating `imageFile` values in the `team` array.
 
-## 11) Data Sources
+## 12) Data Sources
 
 ### Products data
 - `src/data/products.js`
@@ -228,20 +265,20 @@ You can replace team photos by adding files there and updating `imageFile` value
   - `bugs`
   - `logs`
 
-## 12) Important Notes
+## 13) Important Notes
 
 - Displayed storefront currency is currently EGP.
 - This is a frontend-only project; no real backend/API yet.
 - User, cart, theme, and testing state are persisted in browser storage.
 
-## 13) Future Improvements
+## 14) Future Improvements
 
 - Connect to a real backend (Node.js / Laravel / Django / etc.)
 - JWT + refresh tokens instead of local-only auth
 - Real payment gateway integration
 - Admin panel
-- Unit + E2E testing (Jest + RTL + Cypress)
+- Expand CI pipelines for Vitest + Playwright + Cypress + Newman + Selenium
 
-## 14) License
+## 15) License
 
 This project is for educational and development purposes.

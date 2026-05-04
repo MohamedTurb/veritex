@@ -205,6 +205,15 @@ export default function Navbar() {
                           QA Dashboard
                         </Link>
                       )}
+                      {user?.role === 'admin' && (
+                        <Link
+                          to="/testing-tools"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-700"
+                          onClick={() => setUserMenuOpen(false)}
+                        >
+                          Test Tools
+                        </Link>
+                      )}
                       <hr className="my-1 border-gray-100 dark:border-dark-600" />
                       <button
                         onClick={() => { logout(); setUserMenuOpen(false); }}

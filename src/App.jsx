@@ -22,6 +22,7 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import TestingDashboard from './pages/TestingDashboard';
+import { TestToolPage, TestToolsHub } from './pages/TestTools';
 import NotFound from './pages/NotFound';
 
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -75,6 +76,22 @@ function AnimatedRoutes() {
           element={(
             <ProtectedRoute>
               <TestingDashboard />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/testing-tools"
+          element={(
+            <ProtectedRoute>
+              <TestToolsHub />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/testing-tools/:toolId"
+          element={(
+            <ProtectedRoute>
+              <TestToolPage />
             </ProtectedRoute>
           )}
         />

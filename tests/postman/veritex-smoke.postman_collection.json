@@ -1,0 +1,54 @@
+{
+  "info": {
+    "name": "Veritex Shop Smoke",
+    "_postman_id": "d988fd8f-8f1d-4f2f-8bfd-04f9c3e7e997",
+    "description": "Basic smoke checks for locally running Veritex Shop app.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET Home",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Contains Veritex markup', function () {",
+              "  pm.expect(pm.response.text()).to.include('id=\"root\"');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET Shop Route",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/shop"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

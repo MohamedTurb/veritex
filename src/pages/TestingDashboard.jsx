@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { TestingProvider, useTesting } from '../context/TestingContext';
 import SummaryCards from '../components/SummaryCards';
@@ -198,6 +199,18 @@ function DashboardContent() {
               ) : (
                 <p className="mt-5 text-sm text-gray-500 dark:text-gray-400">Select two runs to view comparison metrics.</p>
               )}
+            </div>
+          </section>
+
+          <section className="card p-5 md:p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Testing Tools Pages</h2>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Open a dedicated page for each test tool and copy the right command instantly.</p>
+              </div>
+              <Link to="/testing-tools" className="btn-primary px-5 py-3 text-sm">
+                Open Tools Center
+              </Link>
             </div>
           </section>
 
