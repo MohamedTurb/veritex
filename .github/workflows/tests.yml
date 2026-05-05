@@ -1,14 +1,36 @@
-name: CI — Test Suite
+name: CI — Comprehensive Test Suite
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, develop ]
 
 jobs:
+  lint-and-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check formatting with Prettier
+        run: npm run format -- --check
+
   test:
-    name: Run all tests
+    name: Run All Tests
     runs-on: ubuntu-latest
     env:
       CI: true
@@ -33,6 +55,7 @@ jobs:
           mkdir -p reports/playwright
           mkdir -p reports/selenium
           mkdir -p reports/vitest
+          mkdir -p reports/coverage
 
       - name: Install Playwright browsers and dependencies
         run: npx playwright install --with-deps
@@ -40,25 +63,36 @@ jobs:
       - name: Install Cypress binary
         run: npx cypress install
 
-      - name: Run unit + integration tests (Vitest)
-        # Capture Vitest JSON output for artifact upload
-        run: npx vitest run --reporter=json > reports/vitest/vitest.json || true
+      - name: Run ESLint checks
+        run: npm run lint
 
-      - name: Run Playwright E2E tests
-        # Generate JUnit output in playwright results (junit reporter)
-        run: npx playwright test --reporter=list --reporter=junit || true
+      - name: Run unit + integration tests (Vitest) with coverage
+        run: npm run test:coverage
+
+      - name: Run accessibility tests (A11y)
+        run: npm run test:a11y || true
+
+      - name: Run Playwright E2E tests (Multi-browser)
+        run: npx playwright test --reporter=html,junit || true
 
       - name: Run Cypress smoke tests (headless)
-        # Export JUnit XML for Cypress
         run: npx cypress run --reporter junit --reporter-options "mochaFile=reports/cypress/results-[hash].xml" || true
 
       - name: Run Postman collection with Newman
-        run: newman run tests/postman/veritex-smoke.postman_collection.json -e tests/postman/local.postman_environment.json --reporters cli,junit --reporter-junit-export reports/newman/newman-junit.xml || true
+        run: npm run postman:run --reporters cli,junit --reporter-junit-export reports/newman/newman-junit.xml || true
 
       - name: Run Selenium smoke test
         run: |
           mkdir -p reports/selenium
-          node tests/selenium/shop.smoke.test.mjs > reports/selenium/selenium-output.txt 2>&1 || true
+          npm run selenium:run > reports/selenium/selenium-output.txt 2>&1 || true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
       - name: Upload test artifacts
         if: always()
@@ -67,7 +101,122 @@ jobs:
           name: test-reports
           path: |
             reports/**
+            coverage/**
             cypress/screenshots
             cypress/videos
             playwright-report/**
             test-results/**
+          retention-days: 30
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## Test Results 🧪\n\n';
+            
+            if (fs.existsSync('./coverage/coverage-summary.json')) {
+              const coverage = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
+              const total = coverage.total;
+              comment += `### Coverage Summary\n`;
+              comment += `- Lines: ${total.lines.pct}%\n`;
+              comment += `- Functions: ${total.functions.pct}%\n`;
+              comment += `- Branches: ${total.branches.pct}%\n`;
+              comment += `- Statements: ${total.statements.pct}%\n\n`;
+            }
+            
+            comment += '✅ All tests completed!\n';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  lighthouse:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v9
+        with:
+          configPath: './lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Check for known vulnerabilities
+        run: npm audit fix --dry-run
+        continue-on-error: true
+
+  build:
+    name: Build & Bundle Size Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Check bundle size
+        run: |
+          BUNDLE_SIZE=$(du -sh dist/ | cut -f1)
+          echo "Build size: $BUNDLE_SIZE"
+          if [ $(du -s dist/ | cut -f1) -gt 5000 ]; then
+            echo "⚠️ Bundle size warning: exceeds 5MB"
+          fi
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+

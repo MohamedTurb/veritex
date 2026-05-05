@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useLocalStorage } from '../hooks';
 import PageTransition from '../components/PageTransition';
 
 const Field = ({ label, name, type = 'text', placeholder, value, onChange, error, span = 1 }) => (
@@ -20,10 +21,14 @@ const Field = ({ label, name, type = 'text', placeholder, value, onChange, error
 );
 
 export default function Checkout() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart, hydrated } = useCart();
   const navigate = useNavigate();
+  const [offers] = useLocalStorage('veritex_admin_offers', []);
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedOffer, setAppliedOffer] = useState(null);
+  const [couponMessage, setCouponMessage] = useState('');
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '', phone: '',
     address: '', city: '', state: '', zip: '', country: 'US',
@@ -31,9 +36,33 @@ export default function Checkout() {
   });
   const [errors, setErrors] = useState({});
 
-  const shipping = totalPrice >= 50 ? 0 : 9.99;
-  const tax = totalPrice * 0.1;
-  const total = totalPrice + shipping + tax;
+  const activeOffers = useMemo(() => offers.filter(offer => offer.active), [offers]);
+
+  const normalizedCoupon = couponCode.trim().toUpperCase();
+  const couponDiscountPercent = appliedOffer?.discount ? Number(appliedOffer.discount) : 0;
+  const discountAmount = couponDiscountPercent ? totalPrice * (couponDiscountPercent / 100) : 0;
+  const discountedSubtotal = Math.max(0, totalPrice - discountAmount);
+  const shipping = discountedSubtotal >= 50 || appliedOffer?.discount === 0 ? 0 : 9.99;
+  const tax = discountedSubtotal * 0.1;
+  const total = discountedSubtotal + shipping + tax;
+
+  const handleApplyCoupon = () => {
+    if (!normalizedCoupon) {
+      setAppliedOffer(null);
+      setCouponMessage('Enter a coupon code to apply it.');
+      return;
+    }
+
+    const foundOffer = activeOffers.find(offer => offer.code?.toUpperCase() === normalizedCoupon);
+    if (!foundOffer) {
+      setAppliedOffer(null);
+      setCouponMessage('Invalid or inactive coupon code.');
+      return;
+    }
+
+    setAppliedOffer(foundOffer);
+    setCouponMessage(foundOffer.discount ? `${foundOffer.discount}% discount applied.` : 'Free shipping applied.');
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -80,7 +109,11 @@ export default function Checkout() {
     navigate('/success');
   };
 
-  if (items.length === 0) {
+  if (!hydrated) {
+    return null;
+  }
+
+  if (!loading && items.length === 0) {
     navigate('/cart');
     return null;
   }
@@ -153,6 +186,26 @@ export default function Checkout() {
                     <Field label="Expiry Date" name="expiry" placeholder="MM/YY" value={form.expiry} onChange={handleChange} error={errors.expiry} />
                     <Field label="CVV" name="cvv" placeholder="123" value={form.cvv} onChange={handleChange} error={errors.cvv} />
                   </div>
+                  <div className="mt-6 rounded-2xl border border-gray-100 bg-gray-50 p-4 dark:border-dark-700 dark:bg-dark-700/40">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Coupon Code</label>
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                      <input
+                        value={couponCode}
+                        onChange={e => setCouponCode(e.target.value)}
+                        placeholder="SUMMER15"
+                        className="input-field sm:flex-1"
+                      />
+                      <button type="button" onClick={handleApplyCoupon} className="btn-secondary px-4 py-3 sm:w-40">
+                        Apply Code
+                      </button>
+                    </div>
+                    {couponMessage && <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{couponMessage}</p>}
+                    {appliedOffer && (
+                      <p className="mt-2 text-sm font-semibold text-green-600 dark:text-green-400">
+                        Applied: {appliedOffer.code}
+                      </p>
+                    )}
+                  </div>
                   <div className="flex gap-3 mt-6">
                     <button onClick={() => setStep(1)} className="btn-secondary flex-1 py-4">← Back</button>
                     <motion.button
@@ -196,6 +249,9 @@ export default function Checkout() {
             </div>
             <div className="border-t border-gray-100 dark:border-dark-600 pt-3 space-y-2 text-sm">
               <div className="flex justify-between text-gray-600 dark:text-gray-400"><span>Subtotal</span><span>EGP {totalPrice.toFixed(2)}</span></div>
+              {appliedOffer?.discount ? (
+                <div className="flex justify-between text-green-600 dark:text-green-400"><span>Discount</span><span>- EGP {discountAmount.toFixed(2)}</span></div>
+              ) : null}
               <div className="flex justify-between text-gray-600 dark:text-gray-400"><span>Shipping</span><span>{shipping === 0 ? 'FREE' : `EGP ${shipping.toFixed(2)}`}</span></div>
               <div className="flex justify-between text-gray-600 dark:text-gray-400"><span>Tax</span><span>EGP {tax.toFixed(2)}</span></div>
               <div className="flex justify-between font-bold text-gray-900 dark:text-white text-base pt-2 border-t border-gray-100 dark:border-dark-600">

@@ -13,4 +13,15 @@ describe('Veritex Shop smoke checks', () => {
     cy.visit('/testing-dashboard');
     cy.contains('Welcome back').should('be.visible');
   });
+
+  it('opens forgot password and confirms reset email delivery', () => {
+    cy.visit('/login');
+    cy.contains('Forgot password?').click();
+
+    cy.contains('Reset your password').should('be.visible');
+    cy.get('input[placeholder="you@example.com"]').type('testing@veritex.com');
+    cy.contains('button', 'Send Reset Link').click();
+
+    cy.contains('Reset link sent. Check your inbox and return to sign in.').should('be.visible');
+  });
 });

@@ -9,5 +9,21 @@ export default defineConfig({
     setupFiles: './src/test/setupTests.js',
     css: true,
     exclude: ['tests/e2e/**', 'node_modules/**', 'dist/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html', 'lcov', 'json-summary'],
+      reportOnFailure: true,
+      exclude: [
+        'node_modules/',
+        'src/test/',
+        '**/*.test.{js,jsx,ts,tsx}',
+        '**/setupTests.js',
+        'dist/',
+      ],
+      lines: 70,
+      functions: 70,
+      branches: 70,
+      statements: 70,
+    },
   },
 })

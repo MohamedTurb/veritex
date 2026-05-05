@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useState } from 'react';
 
 const CartContext = createContext();
 
@@ -39,12 +39,14 @@ const cartReducer = (state, action) => {
 
 export function CartProvider({ children }) {
   const [state, dispatch] = useReducer(cartReducer, { items: [] });
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('veritex_cart');
     if (saved) {
       dispatch({ type: 'LOAD_CART', payload: JSON.parse(saved) });
     }
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export function CartProvider({ children }) {
   const totalPrice = state.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items: state.items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}>
+    <CartContext.Provider value={{ items: state.items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, hydrated }}>
       {children}
     </CartContext.Provider>
   );

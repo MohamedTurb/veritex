@@ -79,7 +79,7 @@ export default function Login() {
               <div>
                 <div className="flex justify-between mb-1.5">
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-                  <a href="#" className="text-xs text-brand-500 hover:text-brand-600">Forgot password?</a>
+                  <Link to="/forgot-password" className="text-xs text-brand-500 hover:text-brand-600">Forgot password?</Link>
                 </div>
                 <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="••••••••"
                   className={`input-field ${errors.password ? 'border-red-400' : ''}`} />

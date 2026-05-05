@@ -1,7 +1,7 @@
 import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 
-const baseUrl = process.env.BASE_URL || 'http://localhost:4173';
+const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
 
 const options = new chrome.Options();
 options.addArguments('--headless=new');

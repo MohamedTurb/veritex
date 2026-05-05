@@ -1,0 +1,3 @@
+# .nvmrc - Node Version Manager configuration
+# Specifies the Node.js version for this project
+20.10.0
