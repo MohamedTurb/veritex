@@ -96,8 +96,8 @@ export default function Team() {
       <section className="bg-gray-50 dark:bg-dark-800 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="section-title mb-4">Join Our Team</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-lg mb-8">We're always looking for talented people to help us build the future of shopping.</p>
-          <a href="#" className="btn-primary inline-block py-3 px-8">View Open Positions</a>
+          <p className="text-gray-500 dark:text-gray-400 text-lg mb-8">We&apos;re always looking for talented people to help us build the future of shopping.</p>
+          <a href="/contact" className="btn-primary inline-block py-3 px-8">View Open Positions</a>
         </div>
       </section>
     </PageTransition>

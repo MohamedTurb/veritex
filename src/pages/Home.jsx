@@ -95,7 +95,7 @@ export default function Home() {
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="section-title">Shop by Category</h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Find exactly what you're looking for</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">Find exactly what you&apos;re looking for</p>
           </div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -145,7 +145,7 @@ export default function Home() {
           <div className="relative max-w-lg">
             <span className="badge bg-white/20 text-white mb-4">Limited Time</span>
             <h2 className="text-3xl md:text-4xl font-bold">Up to 40% Off</h2>
-            <p className="mt-2 text-orange-100">On selected electronics and accessories. Don't miss out!</p>
+            <p className="mt-2 text-orange-100">On selected electronics and accessories. Don&apos;t miss out!</p>
             <Link to="/shop?category=Electronics" className="inline-block mt-6 px-6 py-3 bg-white text-brand-600 font-bold rounded-xl hover:bg-orange-50 transition-colors">
               Shop the Sale
             </Link>

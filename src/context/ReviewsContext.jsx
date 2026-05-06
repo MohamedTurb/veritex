@@ -37,7 +37,9 @@ export function ReviewsProvider({ children }) {
   useEffect(() => {
     try {
       localStorage.setItem('veritex_reviews', JSON.stringify(state.reviews));
-    } catch (e) {}
+    } catch (e) {
+      // Ignore storage errors
+    }
   }, [state.reviews]);
 
   const addReview = (review) => dispatch({ type: 'ADD', payload: review });

@@ -71,17 +71,17 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
-                <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="you@example.com"
+                <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
+                <input id="login-email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="you@example.com"
                   className={`input-field ${errors.email ? 'border-red-400' : ''}`} />
                 {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
               </div>
               <div>
                 <div className="flex justify-between mb-1.5">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                  <label htmlFor="login-password" className="text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
                   <Link to="/forgot-password" className="text-xs text-brand-500 hover:text-brand-600">Forgot password?</Link>
                 </div>
-                <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="••••••••"
+                <input id="login-password" name="password" type="password" value={form.password} onChange={handleChange} placeholder="••••••••"
                   className={`input-field ${errors.password ? 'border-red-400' : ''}`} />
                 {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
               </div>
@@ -98,7 +98,7 @@ export default function Login() {
             </form>
 
             <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link to="/signup" className="text-brand-500 hover:text-brand-600 font-semibold">Sign up</Link>
             </p>
           </div>
