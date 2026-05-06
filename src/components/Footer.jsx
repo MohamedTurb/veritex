@@ -63,9 +63,13 @@ export default function Footer() {
             <ul className="space-y-2">
               {['Help Center', 'Returns', 'Shipping Policy', 'Privacy Policy', 'Terms of Service'].map(item => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-500 transition-colors">
+                  <button
+                    type="button"
+                    onClick={() => undefined}
+                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-brand-500 transition-colors"
+                  >
                     {item}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -83,13 +87,14 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4">
             {['Twitter', 'Instagram', 'Facebook'].map(social => (
-              <a
+              <button
                 key={social}
-                href="#"
+                type="button"
+                onClick={() => undefined}
                 className="text-sm text-gray-400 hover:text-brand-500 transition-colors"
               >
                 {social}
-              </a>
+              </button>
             ))}
           </div>
         </div>

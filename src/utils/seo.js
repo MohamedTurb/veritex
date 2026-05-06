@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function useSEO(title, description, image, url) {
   const updateMetaTags = () => {
     // Title
@@ -37,6 +39,7 @@ export function useSEO(title, description, image, url) {
 
   React.useEffect(() => {
     updateMetaTags();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, description, image, url]);
 }
 

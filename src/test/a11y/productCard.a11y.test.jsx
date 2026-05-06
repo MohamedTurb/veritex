@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import ProductCard from '../../components/ProductCard';

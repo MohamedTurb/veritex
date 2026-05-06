@@ -9,13 +9,17 @@ export function NewsletterProvider({ children }) {
     try {
       const saved = JSON.parse(localStorage.getItem('veritex_newsletter') || '[]');
       if (Array.isArray(saved)) setEmails(saved);
-    } catch (e) {}
+    } catch (e) {
+      // Ignore parse errors
+    }
   }, []);
 
   useEffect(() => {
     try {
       localStorage.setItem('veritex_newsletter', JSON.stringify(emails));
-    } catch (e) {}
+    } catch (e) {
+      // Ignore storage errors
+    }
   }, [emails]);
 
   const subscribe = (email) => {

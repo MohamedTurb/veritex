@@ -34,7 +34,9 @@ export function WishlistProvider({ children }) {
   useEffect(() => {
     try {
       localStorage.setItem('veritex_wishlist', JSON.stringify(state.items));
-    } catch (e) {}
+    } catch (e) {
+      // Ignore storage errors
+    }
   }, [state.items]);
 
   const addToWishlist = (product) => dispatch({ type: 'ADD', payload: product });

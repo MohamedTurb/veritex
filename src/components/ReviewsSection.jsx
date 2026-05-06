@@ -58,7 +58,7 @@ export default function ReviewsSection({ productId }) {
             className="card p-6 mb-6"
           >
             <div>
-              <label className="block text-sm font-medium mb-2">Rating</label>
+              <label htmlFor="review-rating" className="block text-sm font-medium mb-2">Rating</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(r => (
                   <button
@@ -78,8 +78,9 @@ export default function ReviewsSection({ productId }) {
             </div>
 
             <div className="mt-4">
-              <label className="block text-sm font-medium mb-2">Title</label>
+              <label htmlFor="review-title" className="block text-sm font-medium mb-2">Title</label>
               <input
+                id="review-title"
                 type="text"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
@@ -89,8 +90,9 @@ export default function ReviewsSection({ productId }) {
             </div>
 
             <div className="mt-4">
-              <label className="block text-sm font-medium mb-2">Review</label>
+              <label htmlFor="review-text" className="block text-sm font-medium mb-2">Review</label>
               <textarea
+                id="review-text"
                 value={text}
                 onChange={e => setText(e.target.value)}
                 placeholder="Share your thoughts..."

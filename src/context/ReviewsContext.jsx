@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 
 const ReviewsContext = createContext();
 

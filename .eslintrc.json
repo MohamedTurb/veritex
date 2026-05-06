@@ -1,0 +1,61 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "react/prop-types": "warn",
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "no-console": ["warn", { "allow": ["warn", "error", "log"] }],
+    "react/no-unescaped-entities": "warn",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+  },
+  "overrides": [
+    {
+      "files": ["src/test/**", "src/**/*.test.{js,jsx,ts,tsx}", "src/**/*.spec.{js,jsx,ts,tsx}", "**/*.cy.jsx", "cypress/**"],
+      "env": {
+        "jest": true,
+        "node": true
+      },
+      "globals": {
+        "describe": "readonly",
+        "it": "readonly",
+        "test": "readonly",
+        "expect": "readonly",
+        "beforeEach": "readonly",
+        "beforeAll": "readonly",
+        "afterEach": "readonly",
+        "afterAll": "readonly",
+        "cy": "readonly",
+        "beforeHooks": "readonly"
+      },
+      "rules": {
+        "no-undef": "off",
+        "react/prop-types": "off",
+        "no-unused-vars": "off"
+      }
+    }
+  ]
+}
