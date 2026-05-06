@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 const contactInfo = [
   { icon: '📧', label: 'Email', value: 'hello@veritex.shop', href: 'mailto:hello@veritex.shop' },
   { icon: '📞', label: 'Phone', value: '+20155537991', href: 'tel:+20155537991' },
-  { icon: '📍', label: 'Address', value: 'Egyptian Chinese Universty', href: '#' },
+  { icon: '📍', label: 'Address', value: 'Egyptian Chinese Universty', href: null },
   { icon: '🕒', label: 'Hours', value: 'Mon–Fri, 9am–6pm EST', href: null },
 ];
 
@@ -38,7 +38,7 @@ export default function Contact() {
     await new Promise(r => setTimeout(r, 1200));
     setLoading(false);
     setForm({ name: '', email: '', subject: '', message: '' });
-    toast.success('Message sent! We\'ll get back to you within 24 hours.', {
+    toast.success('Message sent! We&apos;ll get back to you within 24 hours.', {
       duration: 4000,
       style: { borderRadius: '12px', background: '#f97316', color: '#fff' },
     });
@@ -50,7 +50,7 @@ export default function Contact() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <span className="badge bg-brand-500/20 text-brand-400 mb-4">Get in Touch</span>
-            <h1 className="text-5xl md:text-6xl font-bold">We'd Love to<br /><span className="text-gradient">Hear From You</span></h1>
+            <h1 className="text-5xl md:text-6xl font-bold">We&apos;d Love to<br /><span className="text-gradient">Hear From You</span></h1>
             <p className="mt-6 text-gray-400 text-lg">Have a question, feedback, or just want to say hi? Drop us a message.</p>
           </motion.div>
         </div>
@@ -80,9 +80,13 @@ export default function Contact() {
             <div className="pt-4 border-t border-gray-100 dark:border-dark-600">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Follow Us</p>
               <div className="flex gap-3">
-                {['Twitter', 'Instagram', 'LinkedIn'].map(s => (
-                  <a key={s} href="#" className="px-3 py-1.5 text-xs font-medium border border-gray-200 dark:border-dark-500 text-gray-600 dark:text-gray-400 rounded-lg hover:border-brand-400 hover:text-brand-500 transition-colors">
-                    {s}
+                {[
+                  { label: 'Twitter', href: 'https://x.com/veritexshop' },
+                  { label: 'Instagram', href: 'https://instagram.com/veritexshop' },
+                  { label: 'LinkedIn', href: 'https://linkedin.com' },
+                ].map(s => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="px-3 py-1.5 text-xs font-medium border border-gray-200 dark:border-dark-500 text-gray-600 dark:text-gray-400 rounded-lg hover:border-brand-400 hover:text-brand-500 transition-colors">
+                    {s.label}
                   </a>
                 ))}
               </div>
@@ -95,24 +99,24 @@ export default function Contact() {
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Your Name</label>
-                  <input name="name" value={form.name} onChange={handleChange} placeholder="John Doe" className={`input-field ${errors.name ? 'border-red-400' : ''}`} />
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Your Name</label>
+                  <input id="name" name="name" value={form.name} onChange={handleChange} placeholder="John Doe" className={`input-field ${errors.name ? 'border-red-400' : ''}`} />
                   {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email Address</label>
-                  <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="john@example.com" className={`input-field ${errors.email ? 'border-red-400' : ''}`} />
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email Address</label>
+                  <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="john@example.com" className={`input-field ${errors.email ? 'border-red-400' : ''}`} />
                   {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Subject</label>
-                <input name="subject" value={form.subject} onChange={handleChange} placeholder="How can we help?" className={`input-field ${errors.subject ? 'border-red-400' : ''}`} />
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Subject</label>
+                <input id="subject" name="subject" value={form.subject} onChange={handleChange} placeholder="How can we help?" className={`input-field ${errors.subject ? 'border-red-400' : ''}`} />
                 {errors.subject && <p className="text-xs text-red-500 mt-1">{errors.subject}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
-                <textarea name="message" value={form.message} onChange={handleChange} rows={5} placeholder="Tell us more..." className={`input-field resize-none ${errors.message ? 'border-red-400' : ''}`} />
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
+                <textarea id="message" name="message" value={form.message} onChange={handleChange} rows={5} placeholder="Tell us more..." className={`input-field resize-none ${errors.message ? 'border-red-400' : ''}`} />
                 {errors.message && <p className="text-xs text-red-500 mt-1">{errors.message}</p>}
                 <p className="text-xs text-gray-400 mt-1">{form.message.length}/500</p>
               </div>

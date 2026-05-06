@@ -80,7 +80,7 @@ export default function About() {
         <h2 className="section-title mb-6">Our Mission</h2>
         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">
           We believe everyone deserves access to great products at honest prices. By working directly with manufacturers
-          and cutting out unnecessary middlemen, we're able to pass real savings on to you — without ever compromising
+          and cutting out unnecessary middlemen, we&apos;re able to pass real savings on to you — without ever compromising
           on the quality or experience you deserve.
         </p>
       </section>

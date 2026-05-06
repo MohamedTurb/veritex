@@ -1,6 +1,8 @@
 export async function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) {
-    console.log('Service Workers not supported');
+    if (import.meta.env.DEV) {
+      console.log('Service Workers not supported');
+    }
     return null;
   }
 
@@ -9,14 +11,18 @@ export async function registerServiceWorker() {
       scope: '/',
     });
 
-    console.log('Service Worker registered:', registration);
+    if (import.meta.env.DEV) {
+      console.log('Service Worker registered:', registration);
+    }
 
     // Listen for updates
     registration.addEventListener('updatefound', () => {
       const newWorker = registration.installing;
       newWorker.addEventListener('statechange', () => {
         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          console.log('New service worker available');
+          if (import.meta.env.DEV) {
+            console.log('New service worker available');
+          }
           // You can notify the user here
         }
       });

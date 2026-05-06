@@ -23,7 +23,9 @@ export function measurePerformance(name) {
             startTime: measure.startTime,
           };
         } catch (e) {
-          console.error('Performance measurement failed:', e);
+          if (import.meta.env.DEV) {
+            console.error('Performance measurement failed:', e);
+          }
           return null;
         }
       },
@@ -57,11 +59,17 @@ export function reportVitals() {
   if ('web-vitals' in window) {
     const vitals = window['web-vitals'];
     if (typeof vitals.getCLS === 'function') {
-      vitals.getCLS(console.log);
-      vitals.getFID(console.log);
-      vitals.getFCP(console.log);
-      vitals.getLCP(console.log);
-      vitals.getTTFB(console.log);
+      const logVital = metric => {
+        if (import.meta.env.DEV) {
+          console.log(metric);
+        }
+      };
+
+      vitals.getCLS(logVital);
+      vitals.getFID(logVital);
+      vitals.getFCP(logVital);
+      vitals.getLCP(logVital);
+      vitals.getTTFB(logVital);
     }
   }
 }

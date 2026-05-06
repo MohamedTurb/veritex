@@ -7,8 +7,9 @@ import PageTransition from '../components/PageTransition';
 
 const Field = ({ label, name, type = 'text', placeholder, value, onChange, error, span = 1 }) => (
   <div className={span === 2 ? 'sm:col-span-2' : ''}>
-    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{label}</label>
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{label}</label>
     <input
+      id={name}
       type={type}
       name={name}
       placeholder={placeholder}
@@ -157,8 +158,8 @@ export default function Checkout() {
                     <Field label="City" name="city" placeholder="New York" value={form.city} onChange={handleChange} error={errors.city} />
                     <Field label="ZIP Code" name="zip" placeholder="10001" value={form.zip} onChange={handleChange} error={errors.zip} />
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Country</label>
-                      <select name="country" value={form.country} onChange={handleChange} className="input-field">
+                      <label htmlFor="country" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Country</label>
+                      <select id="country" name="country" value={form.country} onChange={handleChange} className="input-field">
                         <option value="US">United States</option>
                         <option value="UK">United Kingdom</option>
                         <option value="CA">Canada</option>
@@ -187,9 +188,10 @@ export default function Checkout() {
                     <Field label="CVV" name="cvv" placeholder="123" value={form.cvv} onChange={handleChange} error={errors.cvv} />
                   </div>
                   <div className="mt-6 rounded-2xl border border-gray-100 bg-gray-50 p-4 dark:border-dark-700 dark:bg-dark-700/40">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Coupon Code</label>
+                    <label htmlFor="couponCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Coupon Code</label>
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <input
+                        id="couponCode"
                         value={couponCode}
                         onChange={e => setCouponCode(e.target.value)}
                         placeholder="SUMMER15"
