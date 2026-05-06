@@ -10,6 +10,28 @@ import Checkout from '../../pages/Checkout';
 
 expect.extend(toHaveNoViolations);
 
+const seedCheckoutState = () => {
+  localStorage.setItem('veritex_cart', JSON.stringify([
+    {
+      id: 101,
+      title: 'QA Hoodie',
+      price: 100,
+      quantity: 1,
+      image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&q=80',
+    },
+  ]));
+
+  localStorage.setItem('veritex_admin_offers', JSON.stringify([
+    {
+      id: 'OFR-QA',
+      code: 'SAVE10',
+      discount: 10,
+      active: true,
+      expiresAt: '2026-12-31',
+    },
+  ]));
+};
+
 const CheckoutWithProviders = () => (
   <BrowserRouter>
     <ThemeProvider>
@@ -23,25 +45,35 @@ const CheckoutWithProviders = () => (
 );
 
 describe('Checkout Page Accessibility', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    seedCheckoutState();
+    window.history.pushState({}, '', '/checkout');
+  });
+
   it('should not have any accessibility violations', async () => {
     const { container } = render(<CheckoutWithProviders />);
-    // Small delay to ensure content is rendered
-    await new Promise((r) => setTimeout(r, 100));
+    await screen.findByRole('heading', { name: /checkout/i });
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('should have proper form labels', () => {
+  it('should have proper form labels', async () => {
     render(<CheckoutWithProviders />);
-    // Wait for form elements
-    const formElements = document.querySelectorAll('input, select, textarea');
-    expect(formElements.length).toBeGreaterThan(0);
+    expect(await screen.findByLabelText(/first name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/address/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/city/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/zip code/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/country/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/state/i)).toBeInTheDocument();
   });
 
-  it('should have accessible form inputs', () => {
+  it('should have accessible form inputs', async () => {
     render(<CheckoutWithProviders />);
-    const inputs = screen.queryAllByRole('textbox');
-    // Inputs should be accessible via role
+    await screen.findByLabelText(/first name/i);
     expect(document.querySelectorAll('input').length).toBeGreaterThan(0);
   });
 });

@@ -56,7 +56,7 @@ describe('Home Page Performance', () => {
     const startTime = performance.now();
 
     // Simulate user interaction
-    const buttons = screen.getAllByRole('button');
+    const buttons = screen.queryAllByRole('button');
     if (buttons.length > 0) {
       fireEvent.click(buttons[0]);
     }

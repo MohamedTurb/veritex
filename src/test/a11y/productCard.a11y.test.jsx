@@ -2,6 +2,9 @@
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import ProductCard from '../../components/ProductCard';
+import { CartProvider } from '../../context/CartContext';
+import { WishlistProvider } from '../../context/WishlistContext';
+import { BrowserRouter } from 'react-router-dom';
 
 expect.extend(toHaveNoViolations);
 
@@ -20,20 +23,42 @@ describe('ProductCard Accessibility', () => {
 
   it('should not have any accessibility violations', async () => {
     const { container } = render(
-      <ProductCard product={mockProduct} onAddToCart={() => {}} />
+      <BrowserRouter>
+        <CartProvider>
+          <WishlistProvider>
+            <ProductCard product={mockProduct} onAddToCart={() => {}} />
+          </WishlistProvider>
+        </CartProvider>
+      </BrowserRouter>
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
   it('should have proper image alt text', () => {
-    render(<ProductCard product={mockProduct} onAddToCart={() => {}} />);
+    render(
+      <BrowserRouter>
+        <CartProvider>
+          <WishlistProvider>
+            <ProductCard product={mockProduct} onAddToCart={() => {}} />
+          </WishlistProvider>
+        </CartProvider>
+      </BrowserRouter>
+    );
     const image = screen.getByAltText(mockProduct.title);
     expect(image).toBeInTheDocument();
   });
 
   it('should have semantic button elements', () => {
-    render(<ProductCard product={mockProduct} onAddToCart={() => {}} />);
+    render(
+      <BrowserRouter>
+        <CartProvider>
+          <WishlistProvider>
+            <ProductCard product={mockProduct} onAddToCart={() => {}} />
+          </WishlistProvider>
+        </CartProvider>
+      </BrowserRouter>
+    );
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
   });
