@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import PageTransition from '../components/PageTransition';
 import ProductCard from '../components/ProductCard';
+import ReviewsSection from '../components/ReviewsSection';
 import products from '../data/products';
 import toast from 'react-hot-toast';
 
@@ -126,6 +127,8 @@ export default function ProductDetails() {
             </div>
           </section>
         )}
+
+        <ReviewsSection productId={product.id} />
       </div>
     </PageTransition>
   );

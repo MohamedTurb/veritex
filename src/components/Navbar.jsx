@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -52,6 +53,7 @@ const navLinks = [
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const { items: wishlistItems } = useWishlist();
   const { user, logout } = useAuth();
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();
@@ -139,6 +141,26 @@ export default function Navbar() {
             >
               {dark ? <SunIcon /> : <MoonIcon />}
             </button>
+
+            {/* Wishlist */}
+            <Link
+              to="/wishlist"
+              className="relative p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 transition-colors"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.8 8.6c0 3.9-3.4 6.9-8.8 11.6L12 21.3l-.1-.1C6.6 15.5 3.2 12.5 3.2 8.6 3.2 6 5.2 4 7.8 4c1.6 0 3.2.8 4.2 2.1L12 7l.1-.9C12.9 4.8 14.5 4 16.1 4c2.6 0 4.7 2 4.7 4.6z" />
+              </svg>
+              {wishlistItems && wishlistItems.length > 0 && (
+                <motion.span
+                  key={wishlistItems.length}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center"
+                >
+                  {wishlistItems.length > 99 ? '99+' : wishlistItems.length}
+                </motion.span>
+              )}
+            </Link>
 
             {/* Cart */}
             <Link

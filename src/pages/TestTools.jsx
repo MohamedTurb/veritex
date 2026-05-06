@@ -43,8 +43,47 @@ const testTools = [
     files: ['cypress/e2e/', 'cypress.config.js']
   },
   {
+    id: 'jest-axe',
+    title: 'jest-axe',
+    subtitle: 'Axe-powered checks that verify core UI surfaces for accessibility regressions.',
+    accent: 'from-violet-500 to-fuchsia-500',
+    commands: ['npm run test:a11y'],
+    highlights: [
+      'Focuses on semantic structure and WCAG-style violations.',
+      'Covers the main UI surfaces used most often in the app.',
+      'Useful as a quick pre-merge regression gate.'
+    ],
+    files: ['src/test/a11y/']
+  },
+  {
+    id: 'lighthouse',
+    title: 'Lighthouse',
+    subtitle: 'Lightweight render and interaction checks for the homepage experience.',
+    accent: 'from-rose-500 to-orange-500',
+    commands: ['npm run build', 'npx lighthouse http://localhost:5173 --config-path=./lighthouserc.json'],
+    highlights: [
+      'Measures render speed and interaction responsiveness.',
+      'Helps catch accidental slowdowns in the home page flow.',
+      'Pairs well with coverage when validating recent changes.'
+    ],
+    files: ['src/test/performance/home-page.perf.test.jsx', 'lighthouserc.json']
+  },
+  {
+    id: 'selenium',
+    title: 'Selenium',
+    subtitle: 'Browser automation script for smoke validation using WebDriver.',
+    accent: 'from-fuchsia-500 to-pink-500',
+    commands: ['npm run selenium:run', 'npm run test:selenium'],
+    highlights: [
+      'Useful when validating WebDriver-based compatibility.',
+      'Runs headless flow checks from a single script.',
+      'Can be integrated into CI job steps.'
+    ],
+    files: ['tests/selenium/shop.smoke.test.mjs']
+  },
+  {
     id: 'postman',
-    title: 'Postman / Newman',
+    title: 'Postman/Newman',
     subtitle: 'HTTP smoke checks executed from collection files in CLI.',
     accent: 'from-orange-500 to-amber-500',
     commands: ['npm run postman:run', 'npm run test:postman'],
@@ -56,17 +95,17 @@ const testTools = [
     files: ['tests/postman/veritex-smoke.postman_collection.json', 'tests/postman/local.postman_environment.json']
   },
   {
-    id: 'selenium',
-    title: 'Selenium WebDriver',
-    subtitle: 'Browser automation script for smoke validation using WebDriver.',
-    accent: 'from-fuchsia-500 to-pink-500',
-    commands: ['npm run selenium:run', 'npm run test:selenium'],
+    id: 'msw',
+    title: 'MSW',
+    subtitle: 'Mock Service Worker setup for API mocking in unit and integration tests.',
+    accent: 'from-teal-500 to-cyan-500',
+    commands: ['npm run test', 'npm run test:coverage'],
     highlights: [
-      'Useful when validating WebDriver-based compatibility.',
-      'Runs headless flow checks from a single script.',
-      'Can be integrated into CI job steps.'
+      'Mocks backend requests so tests stay fast and deterministic.',
+      'Supports realistic auth, product, and order API flows.',
+      'Pairs with Vitest through the shared test setup.'
     ],
-    files: ['tests/selenium/shop.smoke.test.mjs']
+    files: ['src/test/mocks/server.js', 'src/test/mocks/handlers.js']
   }
 ];
 
@@ -115,7 +154,7 @@ export function TestToolsHub() {
             </p>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">Test Tools Center</h1>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-300">
-              This page gives you a dedicated section for every testing tool in the project. Open any card to view the right command, scope, and test files.
+              This page gives you a dedicated section for every testing tool in the project, including unit tests, E2E, accessibility, performance, and API mocking. Open any card to view the right command, scope, and test files.
             </p>
           </header>
 

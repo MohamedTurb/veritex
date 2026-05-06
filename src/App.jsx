@@ -1,15 +1,21 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
+import { ReviewsProvider } from './context/ReviewsContext';
+import { NewsletterProvider } from './context/NewsletterContext';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { registerServiceWorker } from './utils/pwa';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
+import Wishlist from './pages/Wishlist';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Success from './pages/Success';
@@ -54,8 +60,9 @@ function AnimatedRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout" element={<Checkout />}/>
         <Route path="/success" element={<Success />} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
@@ -104,6 +111,10 @@ function AnimatedRoutes() {
 }
 
 function AppLayout() {
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -128,9 +139,15 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <CartProvider>
-            <AppLayout />
-          </CartProvider>
+          <ReviewsProvider>
+            <NewsletterProvider>
+              <WishlistProvider>
+                <CartProvider>
+                  <AppLayout />
+                </CartProvider>
+              </WishlistProvider>
+            </NewsletterProvider>
+          </ReviewsProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

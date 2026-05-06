@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import toast from 'react-hot-toast';
 
 const StarIcon = ({ filled }) => (
@@ -20,6 +21,7 @@ const badgeColors = {
 
 export default function ProductCard({ product, index = 0 }) {
   const { addItem } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const [imgLoaded, setImgLoaded] = useState(false);
   const isOutOfStock = (product.stock ?? 1) <= 0;
 
@@ -101,21 +103,40 @@ export default function ProductCard({ product, index = 0 }) {
               <span className="text-lg font-bold text-gray-900 dark:text-white">
                 EGP {product.price.toFixed(2)}
               </span>
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={handleAddToCart}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-semibold rounded-lg transition-colors duration-200 shadow-md ${
-                  isOutOfStock
-                    ? 'bg-gray-400 cursor-not-allowed shadow-none'
-                    : 'bg-brand-500 hover:bg-brand-600 shadow-brand-500/25'
-                }`}
-                disabled={isOutOfStock}
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                </svg>
-                {isOutOfStock ? 'Unavailable' : 'Add'}
-              </motion.button>
+              <div className="flex items-center gap-2">
+                <motion.button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(product); }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-pressed={isInWishlist(product.id)}
+                  className={`p-2 rounded-lg transition-colors duration-150 ${isInWishlist(product.id) ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600 dark:bg-dark-700 dark:text-gray-300'}`}
+                >
+                  {isInWishlist(product.id) ? (
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M20.8 8.6c0 3.9-3.4 6.9-8.8 11.6L12 21.3l-.1-.1C6.6 15.5 3.2 12.5 3.2 8.6 3.2 6 5.2 4 7.8 4c1.6 0 3.2.8 4.2 2.1L12 7l.1-.9C12.9 4.8 14.5 4 16.1 4c2.6 0 4.7 2 4.7 4.6z" />
+                    </svg>
+                  )}
+                </motion.button>
+
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleAddToCart}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-white text-xs font-semibold rounded-lg transition-colors duration-200 shadow-md ${
+                    isOutOfStock
+                      ? 'bg-gray-400 cursor-not-allowed shadow-none'
+                      : 'bg-brand-500 hover:bg-brand-600 shadow-brand-500/25'
+                  }`}
+                  disabled={isOutOfStock}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  </svg>
+                  {isOutOfStock ? 'Unavailable' : 'Add'}
+                </motion.button>
+              </div>
             </div>
           </div>
         </div>

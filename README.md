@@ -43,6 +43,21 @@ A modern, full-featured e-commerce platform built with React + Vite, combining a
 
 ---
 
+## 🎉 Recently Added (Latest Update)
+
+**New Features Implemented:**
+- ❤️ **Wishlist System** - Save favorite products
+- ⭐ **Customer Reviews & Ratings** - Product reviews with 5-star system  
+- 📧 **Newsletter Subscription** - Email signup in footer
+- 📱 **Progressive Web App (PWA)** - Installable app with offline support
+- ⚡ **Performance Optimizations** - Lazy loading, image optimization
+- 🔍 **SEO Improvements** - Meta tags, structured data
+- 🚀 **CI/CD Pipeline** - Automated testing with GitHub Actions
+
+📚 **Documentation**: See [FEATURES.md](FEATURES.md) and [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) for detailed information.
+
+---
+
 ## 📋 Quick Navigation
 
 - [Project Overview](#overview)
@@ -424,6 +439,8 @@ See [src/test/README.md](src/test/README.md) and [tests/e2e/README.md](tests/e2e
 - ✅ Search functionality with debouncing
 - ✅ Sorting (featured, price, rating)
 - ✅ Shopping cart with persistence
+- ✅ **Wishlist/Favorites** ❤️ - Save products for later
+- ✅ **Product Reviews & Ratings** ⭐ - Customer reviews (5-star system)
 - ✅ Multi-step checkout
 - ✅ Order confirmation
 - ✅ User accounts & dashboard
@@ -437,6 +454,16 @@ See [src/test/README.md](src/test/README.md) and [tests/e2e/README.md](tests/e2e
 - ✅ Loading states
 - ✅ Error handling
 - ✅ Page transitions
+- ✅ **Lazy Image Loading** ⚡ - Performance optimized images
+- ✅ **Newsletter Subscription** 📧 - Email signup in footer
+
+### 🚀 Performance & PWA
+- ✅ **Progressive Web App (PWA)** 📱 - Installable app
+- ✅ **Service Worker** - Offline support & caching
+- ✅ **Performance Optimization** ⚡ - Lazy loading, code splitting
+- ✅ **SEO Improvements** 🔍 - Meta tags, structured data
+- ✅ Core Web Vitals optimized
+- ✅ Bundle size < 500KB
 
 ### 🧪 Testing & Quality
 - ✅ 70%+ code coverage
@@ -445,7 +472,8 @@ See [src/test/README.md](src/test/README.md) and [tests/e2e/README.md](tests/e2e
 - ✅ Performance optimization
 - ✅ Security validation
 - ✅ API mocking (MSW)
-- ✅ Automated CI/CD
+- ✅ **Automated CI/CD** - GitHub Actions pipeline
+- ✅ Accessibility (A11y) tests
 
 ### 🔐 Security
 - ✅ Secure authentication
